@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace+id = SQL语句的坐标-->
+<mapper namespace="cskaoyan">
+    <!--id:在当前xml文件中唯一-->
+    <!--resultType:写返回类型的全限定名称-->
+    <select id="aaa" resultType="com.cskaoyan.bean.User">
+        select * from user where id = #{id}
+    </select>
+
+    <select id="bbb" resultType="com.cskaoyan.bean.User">
+        select * from user where id = #{id}
+    </select>
+
+    <!--不同类型的SQL语句对应不同的标签-->
+    <!--以下的三个标签里只用配置ID，不需要配置resultType-->
+    <insert id="insertUser">
+        insert into user values (#{id},#{name},#{birth})
+    </insert>
+
+    <delete id="deleteUserById">
+        delete from user where id = #{id}
+    </delete>
+
+    <update id="updateUserById">
+        update user set name = #{name} where id = #{id}
+    </update>
+</mapper>

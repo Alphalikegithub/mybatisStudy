@@ -1,0 +1,5 @@
+# Project exclude paths
+/Mybatis/target/
+/Mybatis-dynamic-proxy/target/
+/Mybatis-input/target/
+/Mybatis-settings/target/
