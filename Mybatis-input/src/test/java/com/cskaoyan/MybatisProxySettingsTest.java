@@ -59,4 +59,12 @@ public class MybatisProxySettingsTest {
         int affectedRows = userMapper.insertUserWithUser(user);
         System.out.println(affectedRows);
     }
+    @Test
+    public void testUpdateUserById(){
+        User user = new User();
+        user.setName("王有胜");
+        user.setBirth(new Date());
+        int affectedRows = userMapper.updateUserById(11, user);
+        System.out.println(affectedRows);
+    }
 }

@@ -18,4 +18,7 @@
         insert into user values (#{id},#{name},#{birth})
     </insert>
 
+    <update id="updateUserById">
+        update user set name = #{user.name} , birth = #{user.birth} where  id = #{id}
+    </update>
 </mapper>
