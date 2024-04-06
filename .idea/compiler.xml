@@ -6,11 +6,16 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="Mybatis-input" />
-        <module name="Mybatis" />
-        <module name="Mybatis-dynamic-proxy" />
-        <module name="Mybatis-dynamic-proxy (1)" />
+        <module name="Mybatis-dynamic-multi-query" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="Mybatis" target="1.8" />
+      <module name="Mybatis-dynamic-proxy" target="1.8" />
+      <module name="Mybatis-dynamic-proxy (1)" target="1.8" />
+      <module name="Mybatis-dynamic-sql" target="1.8" />
+      <module name="Mybatis-input" target="1.8" />
+      <module name="Mybatis-output" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

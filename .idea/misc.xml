@@ -8,7 +8,20 @@
         <option value="$PROJECT_DIR$/Mybatis-dynamic-proxy/pom.xml" />
         <option value="$PROJECT_DIR$/Mybatis-settings/pom.xml" />
         <option value="$PROJECT_DIR$/Mybatis-input/pom.xml" />
+        <option value="$PROJECT_DIR$/Mybatis-output/pom.xml" />
+        <option value="$PROJECT_DIR$/Mybatis-dynamic-sql/pom.xml" />
+        <option value="$PROJECT_DIR$/Mybatis-dynamic-multi-query/pom.xml" />
       </list>
+    </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/Mybatis-dynamic-proxy/pom.xml" />
+        <option value="$PROJECT_DIR$/Mybatis-dynamic-sql/pom.xml" />
+        <option value="$PROJECT_DIR$/Mybatis-input/pom.xml" />
+        <option value="$PROJECT_DIR$/Mybatis-output/pom.xml" />
+        <option value="$PROJECT_DIR$/Mybatis-settings/pom.xml" />
+        <option value="$PROJECT_DIR$/Mybatis/pom.xml" />
+      </set>
     </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="jbr-17" project-jdk-type="JavaSDK">

@@ -9,4 +9,8 @@
     <select id="selectUserById" resultType="user">
         select * from user where id = #{id}
     </select>
+
+    <select id="selectUserByName" resultType="com.cskaoyan.bean.User">
+        select * from  user where name = #{name}
+    </select>
 </mapper>

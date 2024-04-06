@@ -21,4 +21,21 @@
     <update id="updateUserById">
         update user set name = #{user.name} , birth = #{user.birth} where  id = #{id}
     </update>
+
+    <select id="selectUserByMap" resultType="com.cskaoyan.bean.User">
+        select * from user where id = #{id} or name = #{name}
+    </select>
+
+    <insert id="insertUserWithIndex">
+        insert into user values (#{arg0},#{arg1},#{arg2})
+        /*insert into user values (#{param1},#{param2},#{param3})*/
+    </insert>
+
+    <select id="selectUserByIdAndTableName" resultType="com.cskaoyan.bean.User">
+        select * from ${tableName} where id = #{id}
+    </select>
+
+    <select id="selectUserListByStartIndexAndPageNum" resultType="com.cskaoyan.bean.User">
+        select * from user limit ${startIndex},${pageNum}
+    </select>
 </mapper>

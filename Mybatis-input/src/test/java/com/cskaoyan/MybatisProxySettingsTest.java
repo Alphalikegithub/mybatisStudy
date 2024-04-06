@@ -12,6 +12,8 @@ import org.junit.Test;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author alpha
@@ -66,5 +68,32 @@ public class MybatisProxySettingsTest {
         user.setBirth(new Date());
         int affectedRows = userMapper.updateUserById(11, user);
         System.out.println(affectedRows);
+    }
+    //不推荐使用map传值
+    @Test
+    public void testSelectUserByMap(){
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("id",12);
+        hashMap.put("name","王有胜");
+        List<User> userList = userMapper.selectUserByMap(hashMap);
+        System.out.println(userList);
+    }
+
+    @Test
+    public void testInsertUserWithIndex(){
+        int affectRows = userMapper.insertUserWithIndex(29, "生辰纲", new Date( ));
+        System.out.println(affectRows);
+    }
+
+    @Test
+    public void testSelectUserByIdAndTableName(){
+        User user = userMapper.selectUserByIdAndTableName(28,"user");
+        System.out.println(user);
+    }
+
+    @Test
+    public  void  testSelectUserListByStartIndexAndPageNum(){
+        List<User> userList = userMapper.selectUserListByStartIndexAndPageNum(1, 2);
+        System.out.println(userList);
     }
 }
