@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace+id = SQL语句的坐标-->
+<mapper namespace="com.cskaoyan.UserMapper">
+    <!--id:在当前xml文件中唯一-->
+    <!--resultType:写返回类型的全限定名称-->
+    <select id="selectUserCount" resultType="java.lang.Integer">
+        select  count(id) from  user;
+    </select>
+
+    <select id="selectUserList" resultType="int">
+        select id from user;
+    </select>
+
+    <select id="selectNameList" resultType="string">
+        select name from user
+    </select>
+
+    <select id="selectUserById" resultType="com.cskaoyan.bean.User">
+        select * from user where id = #{id}
+    </select>
+
+    <select id="selectUserByMinId" resultType="com.cskaoyan.bean.User">
+        select * from user where id &gt; #{minId}
+    </select>
+
+    <resultMap id="user2Map" type="com.cskaoyan.bean.User2">
+        <id column="id" property="uid"/>
+        <result column="name" property="username"/>
+        <result column="birth" property="birthday"/>
+    </resultMap>
+
+    <select id="selectUser2ByIdUserResultMap" resultType="user2Map">
+        select id,name,birth from user where id = #{id}
+    </select>
+</mapper>

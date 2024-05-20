@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace+id = SQL语句的坐标-->
+<mapper namespace="com.cskaoyan.UserMapper">
+    <!--id:在当前xml文件中唯一-->
+    <!--resultType:写返回类型的全限定名称-->
+
+
+    <select id="selectUserById" resultType="com.cskaoyan.bean.User">
+        select * from user
+        <where>
+            id = #{id}
+        </where>
+    </select>
+
+    <select id="selectUserListById" resultType="com.cskaoyan.bean.User">
+        <!--if test = ""分号中是一个OGNL表达式，OGNL表达式中对于一些特殊的字符，有特殊的写法
+        常规   xml     OGNL
+        >      &gt;     gt
+        <      &lt;     lt
+        >=     &gt;=    gte
+        <=     &lt;=    lte
+
+        -->
+        select * from user
+        <where>
+            <if test="id gt 10 or id lt 0">
+                id &gt; 10
+            </if>
+
+            <if test="id lte 10">
+                and id &lt;= 10
+            </if>
+        </where>
+
+    </select>
+
+    <select id="selectUserListByUserSelective" resultType="com.cskaoyan.bean.User">
+        select * from user
+        <!--where 可以去除与它相邻的and或者or关键字-->
+        <where>
+            <if test="user.id != null">
+                and id = #{user.id}
+            </if>
+
+            <if test="user.name != null">
+                and name = #{user.name}
+            </if>
+
+            <if test="user.birth != null">
+                and birth = #{user.birth}
+            </if>
+        </where>
+
+    </select>
+
+    <select id="selectUserListMatchById" resultType="com.cskaoyan.bean.User">
+        <!--根据传入的id匹配条件
+            当传入的id>20的时候，查询id>20的用户
+            否则，查询id <= 20 的用户-->
+        select * from user where
+        <choose>
+            <when test="id gt 20">
+                id &gt; 20
+            </when>
+            <otherwise>
+                id &lt;= 20
+            </otherwise>
+        </choose>
+    </select>
+
+    <!--
+    prefix:增加指定的前缀
+    suffix:增加指定的后缀
+    suffixOverrides:去除指定的前缀
+    prefixOverrides:去除指定的后缀
+    -->
+    <update id="updateUserByIdSelective">
+        <!--动态的根据id修改User
+        假如User中传入了name,那我们就修改name
+        假如User中传入了birth,那我们就修改birth-->
+        update user set
+            <trim suffixOverrides="," prefixOverrides="" suffix="" prefix="">
+                <if test="user.name != null">
+                    name = #{user.name},
+                </if>
+                <if test="user.birth != null">
+                    birth = #{user.birth},
+                </if>
+            </trim>
+        where id = #{user.id}
+    </update>
+
+    <!--set标签可以添加指定的关键字set 并且去除多余的后缀-->
+    <update id="updateUserByIdSelectiveUseSet">
+        <!--动态的根据id修改User
+        假如User中传入了name,那我们就修改name
+        假如User中传入了birth,那我们就修改birth-->
+        update user
+        <set>
+            <include refid="updateUserCondition"/>
+        </set>
+        where id = #{user.id}
+    </update>
+
+    <!--提取公共的代码片段-->
+    <sql id="updateUserCondition">
+        <if test="user.name != null">
+            name = #{user.name},
+        </if>
+        <if test="user.birth != null">
+            birth = #{user.birth},
+        </if>
+    </sql>
+
+    <insert id="insertUserReturnId">
+        insert into user values (null,#{user.name},#{user.birth})
+        <!--order : AFTER | BEFORE 表示在目标SQL语句执行之前或者之后去执行
+        resultType 表示执行目标SQL的返回类型
+        keyProperty 表示需要把执行的结果映射到指定的参数中-->
+        <selectKey order="AFTER" resultType="int" keyProperty="user.id">
+            select LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="selectUserListByIdUserList" resultType="com.cskaoyan.bean.User">
+        <!--
+        collection:传进来参数的名字
+        close:循环结束的时候加一个指定的字符
+        open:给循环开始的时候加一个指定的字符
+        item:指循环中的元素，类似于for(int i = 0;i< 10;i++)中的i 元素
+        separator:循环中的元素以指定的字符间隔
+        index:循环中元素的下标
+        -->
+        select * from user where id in
+        (
+            <foreach collection="ids" close="" open="" item="id" separator="," index="" >
+                #{id}
+            </foreach>
+        )
+    </select>
+
+    <select id="selectUserListByIdUserArray" resultType="com.cskaoyan.bean.User">
+        select * from user where id in
+        (
+            <foreach collection="ids" close="" open="" item="id" separator="," index="" >
+                #{id}
+            </foreach>
+        )
+    </select>
+
+    <insert id="insertUserList">
+        <!--insert into user values (?,?,?),(?,?,?),(?,?,?)-->
+        insert into user values
+        <foreach collection="userList" separator="," item="auto">
+            (#{auto.id},#{auto.name},#{auto.birth})
+        </foreach>
+    </insert>
+</mapper>
