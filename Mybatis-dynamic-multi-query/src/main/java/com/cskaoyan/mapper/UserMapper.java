@@ -1,5 +1,8 @@
 package com.cskaoyan.mapper;
 
+import com.cskaoyan.bean.User;
+import org.apache.ibatis.annotations.Param;
+
 /**
  * @author alpha
  * @program: mybatisStudy
@@ -8,4 +11,6 @@ package com.cskaoyan.mapper;
  **/
 
 public interface UserMapper {
+    User selectUserByIdCountQuery(@Param("id") Integer id);
+    User selectUserByIdCrossQuery(@Param("id") Integer id);
 }

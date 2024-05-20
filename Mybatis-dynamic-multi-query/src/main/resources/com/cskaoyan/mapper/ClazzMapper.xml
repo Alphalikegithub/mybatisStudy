@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace：命名空间 -->
+<!-- namespace.id  = SQL语句的坐标 -->
+<mapper namespace="com.cskaoyan.mapper.ClazzMapper">
+    <!-- id: 在当前xml文件中唯一  -->
+    <!-- resultType: 写返回类型的全限定名称 -->
+
+    <!-- 不同类型的SQL语句对应的不同的标签 -->
+    <!-- 以下的三个标签里面只用配置Id，不用配置resultType-->
+    <!--<insert id=""-->
+    <!--<update id=""-->
+    <!--<delete id=""-->
+
+    <resultMap id="clazzCountMap" type="com.cskaoyan.bean.Clazz">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <!--SQL语句坐标定位不在同一个文件中也可以-->
+        <collection property="studentList"
+                    ofType="com.cskaoyan.bean.Student"
+                    select="com.cskaoyan.mapper.StudentMapper.selectStudentByClazzId"
+                    column="id"
+        />
+    </resultMap>
+    <select id="selectClazzByName" resultMap="clazzCountMap">
+        select * from clazz where name = #{name}
+    </select>
+
+    <!--连接查询-->
+    <select id="selectClazzByNameUseCrossQuery" resultMap="clazzCrossMap">
+        SELECT
+            c.id AS cid,
+            c.NAME AS cname,
+            s.*
+        FROM
+            clazz AS c
+                LEFT JOIN student AS s ON c.id = s.clazz_id
+        WHERE
+            c.NAME = #{name};
+    </select>
+    <resultMap id="clazzCrossMap" type="com.cskaoyan.bean.Clazz">
+        <id column="cid" property="id"/>
+        <result column="cname" property="name"/>
+
+        <collection property="studentList" ofType="com.cskaoyan.bean.Student">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+            <result column="age" property="age"/>
+            <result column="gender" property="gender"/>
+            <result column="clazz_id" property="clazzId"/>
+        </collection>
+
+    </resultMap>
+</mapper>

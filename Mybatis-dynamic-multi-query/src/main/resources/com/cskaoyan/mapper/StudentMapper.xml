@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace：命名空间 -->
+<!-- namespace.id  = SQL语句的坐标 -->
+<mapper namespace="com.cskaoyan.mapper.StudentMapper">
+    <!-- id: 在当前xml文件中唯一  -->
+    <!-- resultType: 写返回类型的全限定名称 -->
+
+    <!-- 不同类型的SQL语句对应的不同的标签 -->
+    <!-- 以下的三个标签里面只用配置Id，不用配置resultType-->
+    <!--<insert id=""-->
+    <!--<update id=""-->
+    <!--<delete id=""-->
+    <select id="selectStudentByClazzId" resultType="com.cskaoyan.bean.Student">
+        select id,name,gender,clazz_id as clazzId from student where  clazz_id = #{id}
+    </select>
+    <!--多对多分次查询的入口-->
+
+    <select id="selectStudentByNameCountQuery" resultMap="studentCountMap">
+        select * from student where name = #{name}
+    </select>
+    <resultMap id="studentCountMap" type="com.cskaoyan.bean.Student">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="age" property="age"/>
+        <result column="gender" property="gender"/>
+        <result column="clazz_id" property="clazzId"/>
+
+        <collection property="courseList" ofType="com.cskaoyan.bean.Course"
+                    select="selectCouserListByStudentId"
+                    column="id"/>
+    </resultMap>
+
+    <select id="selectCouserListByStudentId" resultType="com.cskaoyan.bean.Course">
+        SELECT
+            c.id as id,
+            c.name as name,
+            c.techer_name as teacherName,
+            c.score as score
+        FROM
+            s_c AS sc
+                LEFT JOIN course AS c ON sc.cid = c.id
+        WHERE
+            sc.sid = #{id};
+    </select>
+
+
+    <select id="selectStudentByNameCrossQuery" resultMap="studentCrossMap">
+        SELECT
+            s.id AS sid,
+            s.NAME AS sname,
+            s.age AS age,
+            s.gender AS gender,
+            s.clazz_id AS clazzId,
+            c.id AS cid,
+            c.NAME AS cname,
+            c.teacher_name AS teacher_name,
+            c.score AS score
+        FROM
+            student AS s
+                LEFT JOIN s_c AS sc ON s.id = sc.sid
+                LEFT JOIN course AS c ON sc.cid = c.id
+        WHERE
+            s.NAME = #{name};
+    </select>
+    <resultMap id="studentCrossMap" type="com.cskaoyan.bean.Student">
+        <id column="sid" property="id"/>
+        <result column="sname" property="name"/>
+        <result column="age" property="age"/>
+        <result column="gender" property="gender"/>
+        <result column="clazzId" property="clazzId"/>
+
+        <collection property="courseList" ofType="com.cskaoyan.bean.Course">
+            <id column="cid" property="id"/>
+            <result column="name" property="name"/>
+            <result column="teacher_name" property="teacherName"/>
+            <result column="score" property="score"/>
+        </collection>
+
+    </resultMap>
+</mapper>

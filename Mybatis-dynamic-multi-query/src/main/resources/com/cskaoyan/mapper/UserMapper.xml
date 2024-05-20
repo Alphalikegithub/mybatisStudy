@@ -6,6 +6,9 @@
 <!-- namespace：命名空间 -->
 <!-- namespace.id  = SQL语句的坐标 -->
 <mapper namespace="com.cskaoyan.mapper.UserMapper">
+    <sql id="all_column">
+        id,username,nickname,gender,age
+    </sql>
     <!-- id: 在当前xml文件中唯一  -->
     <!-- resultType: 写返回类型的全限定名称 -->
 
@@ -14,4 +17,62 @@
     <!--<insert id=""-->
     <!--<update id=""-->
     <!--<delete id=""-->
+
+    <resultMap id="userCountMap" type="com.cskaoyan.bean.User">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="nickname" property="nickname"/>
+        <result column="gender" property="gender"/>
+        <result column="age" property="age"/>
+        <!--select=后面要写的是SQL 语句的坐标-->
+        <association property="detail"
+                     javaType="com.cskaoyan.bean.UserDetail"
+                     select="com.cskaoyan.mapper.UserMapper.selectUserDetailByUserId"
+                     column="id"/>
+    </resultMap>
+    
+    <select id="selectUserByIdCountQuery" resultMap="userCountMap">
+        select <include refid="all_column"/> from multi.user where id = #{id}
+    </select>
+
+    <select id="selectUserDetailByUserId" resultMap="userCountMap">
+        select * from user_detail where user_id = #{id}
+    </select>
+
+    <!--连接查询-->
+
+    <select id="selectUserByIdCrossQuery" resultMap="userCrossMap">
+        SELECT
+            user.id as id,
+            user.username as username,
+            user.nickname as nickname,
+            user.gender as gender,
+            user.age as age,
+            user_detail.id as did,
+            user_detail.user_id as uduid,
+            user_detail.height as height,
+            user_detail.weight as weight,
+            user_detail.pic as pic
+        FROM
+            `user`
+                LEFT JOIN user_detail ON USER.id = user_detail.id
+        WHERE
+            USER.id = #{id};
+    </select>
+    <resultMap id="userCrossMap" type="com.cskaoyan.bean.User">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="nickname" property="nickname"/>
+        <result column="gender" property="gender"/>
+        <result column="age" property="age"/>
+
+        <!--直接把查询的结果的临时表中的列和引用对象detail去做映射-->
+        <association property="detail" javaType="com.cskaoyan.bean.UserDetail">
+            <id column="did" property="id"/>
+            <result column="uduid" property="userId"/>
+            <result column="height" property="height"/>
+            <result column="weight" property="weight"/>
+            <result column="pic" property="pic"/>
+        </association>
+    </resultMap>
 </mapper>
